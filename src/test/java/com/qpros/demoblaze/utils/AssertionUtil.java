@@ -32,7 +32,7 @@ public class AssertionUtil {
         } else {
             Logger(failedAssertion);
             extentTest.log(LogStatus.FAIL, failedAssertion);
-            Assert.fail();
+            Assert.fail(failedAssertion);
         }
     }
 

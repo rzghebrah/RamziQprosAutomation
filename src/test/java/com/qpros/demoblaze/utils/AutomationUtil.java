@@ -1,5 +1,6 @@
 package com.qpros.demoblaze.utils;
 
+import com.qpros.demoblaze.common.Constants;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 
@@ -20,7 +21,7 @@ public class AutomationUtil {
         TakesScreenshot screenshot = ((TakesScreenshot) driver);
         try {
             File srcFile = screenshot.getScreenshotAs(OutputType.FILE);
-            File destFile = new File(System.getProperty("user.dir") + File.separator + "target" + File.separator + "screenshots" + File.separator + "FailedScreenshot_" + LocalDateTime.now() + ".png");
+            File destFile = new File(Constants.SCREENSHOTS_PATH + "FailedScreenshot_" + LocalDateTime.now() + ".png");
             FileUtils.copyFile(srcFile, destFile);
             Logger("Screenshot Reference: \n" + destFile.getAbsolutePath());
         } catch (UnhandledAlertException alertException) {

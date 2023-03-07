@@ -1,8 +1,8 @@
 # Q-Pros Automation Assignment
-# Assignee: Ramzi Abu Zghebrah
+# Assignee [Ramzi Abu Zghebrah]
 
 # What:
-UI Automation framework, maven based project to test use cases in QPros Technical Assessment. framework was implemented using Selenium webdriver + Java 8 and TestNG unit test framework. Also, HTML Extent Report is used as a reporting solution.
+UI Automation framework "data driven", maven based project to test use cases in QPros Technical Assessment. framework was implemented using Selenium WebDriver + Java 8 and TestNG unit test framework. Also, HTML Extent Report is used as a reporting solution.
 
 
 # How to Run
@@ -13,6 +13,7 @@ The below two ways are available to run the test:
 2- Run ```"execute.xml"```
 
 * If you want to execute test in headless mode, please add "headless_mode=true" to the execution VM options ```"-Dheadless_mode=true"```  [Default value is false and browser session will start]
+* If you would like to test the same flow with different login credentials, please add the new username in data provider under "UsernameData" method --> class ```Executor.java```
 
 # Reporting
 Two reporting types are available:

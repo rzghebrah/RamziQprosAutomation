@@ -3,18 +3,13 @@ package com.qpros.demoblaze.scenarios;
 import com.qpros.demoblaze.common.Constants;
 import com.qpros.demoblaze.pages.*;
 import com.qpros.demoblaze.utils.AssertionUtil;
-import com.qpros.demoblaze.utils.AutomationUtil;
-import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 import org.openqa.selenium.WebDriver;
 
 public class TestCases extends PageBase {
 
-    ExtentTest extentTest;
     AssertionUtil assertionUtil = new AssertionUtil();
-    AutomationUtil automationUtil = new AutomationUtil();
-
-    String username = "Qpros_" + automationUtil.generateRandomValue();
 
     /* Available Pages */
     HomePage homePage = new HomePage(driver);
@@ -29,18 +24,18 @@ public class TestCases extends PageBase {
     /**
      * Method that navigates to https://www.demoblaze.com/ website signup using a new random user, validate successful signup and login using the created user.
      */
-    public void registerAndLogin(ExtentReports extentReports) {
-        extentTest = extentReports.startTest("Register and Login to https://www.demoblaze.com/");
+    public void registerAndLogin(ExtentTest extentTest, String username) {
+        extentTest.log(LogStatus.INFO, "Register and Login to https://www.demoblaze.com/  | using user: " + username);
         /* Navigate to website and signup */
         driver.get(Constants.DEMO_BLAZE_WEBSITE);
-        doSignup();
+        doSignup(username);
         /* validate success message on signup */
         waitAlertIsPresent();
         String actualMessage = driver.switchTo().alert().getText();
         assertionUtil.assertResponseMessage(actualMessage, Constants.EXPECTED_SIGNUP_SUCCESS_MESSAGE, "Signup Verification:", extentTest);
         driver.switchTo().alert().accept();
         /* Login and validate successful login */
-        doLogin();
+        doLogin(username);
         String welcomeMessage = homePage.getWelcomeMessageButton().getText();
         assertionUtil.assertResponseMessage(welcomeMessage, Constants.EXPECTED_WELCOME_MESSAGE + username, "Login Verification:", extentTest);
     }
@@ -48,7 +43,8 @@ public class TestCases extends PageBase {
     /**
      * Steps to complete signup
      */
-    private void doSignup() {
+    private void doSignup(String username) {
+        waitElementIsClickable(homePage.getSignupButton());
         homePage.getSignupButton().click();
         waitElementIsClickable(homePage.getSignupUsernameField());
         homePage.getSignupUsernameField().sendKeys(username);
@@ -59,7 +55,8 @@ public class TestCases extends PageBase {
     /**
      * Steps to complete login
      */
-    private void doLogin() {
+    private void doLogin(String username) {
+        waitElementIsClickable(homePage.getLoginButton());
         homePage.getLoginButton().click();
         waitElementIsClickable(homePage.getPopupLoginButton());
         homePage.getLoginUsernameField().sendKeys(username);
@@ -72,8 +69,8 @@ public class TestCases extends PageBase {
     /**
      * Method that validates each category in the login page at least has 1 item
      */
-    public void validateCategoryItemsExistence(ExtentReports extentReports) {
-        extentTest = extentReports.startTest("Check the listed Categories has Items");
+    public void validateCategoryItemsExistence(ExtentTest extentTest) {
+        extentTest.log(LogStatus.INFO, "Check the listed Categories has Items");
         loginPage.getPhonesCategoryButton().click();
         String getListText = loginPage.getFirstElementInCategoryList().getText();
         assertionUtil.booleanAssertion(!getListText.equals(""), "Phones List", extentTest);
@@ -87,8 +84,8 @@ public class TestCases extends PageBase {
     /**
      * Method that add random item to the cart and validate that item has been added successfully
      */
-    public void addRandomItem(ExtentReports extentReports) {
-        extentTest = extentReports.startTest("Validate adding random item to the cart");
+    public void addRandomItem(ExtentTest extentTest) {
+        extentTest.log(LogStatus.INFO, "Validate adding random item to the cart");
         waitElementIsClickable(loginPage.getFirstElementInCategoryList());
         addItemToCart();
         String actualMessage = driver.switchTo().alert().getText();
@@ -99,8 +96,8 @@ public class TestCases extends PageBase {
     /**
      * Method validate removing items from the cart
      */
-    public void removeItem(ExtentReports extentReports) {
-        extentTest = extentReports.startTest("Validate removing item from cart");
+    public void removeItem(ExtentTest extentTest) {
+        extentTest.log(LogStatus.INFO, "Validate removing item from cart");
         cartPage.getCartButton().click();
         waitElementIsClickable(cartPage.getDeleteItemButton());
         cartPage.getDeleteItemButton().click();
@@ -112,8 +109,8 @@ public class TestCases extends PageBase {
     /**
      * Method to validate end-to-end checkout process
      */
-    public void completeCheckout(ExtentReports extentReports) {
-        extentTest = extentReports.startTest("Complete successful checkout with random item");
+    public void completeCheckout(ExtentTest extentTest) {
+        extentTest.log(LogStatus.INFO, "Complete successful checkout with random item");
         loginPage.getHomeButton().click();
         waitMilliseconds(1000);
         addItemToCart();
@@ -121,13 +118,7 @@ public class TestCases extends PageBase {
         cartPage.getCartButton().click();
         cartPage.getPlaceOrderButton().click();
         waitElementIsClickable(checkoutPage.getNameField());
-        checkoutPage.getNameField().sendKeys(Constants.NAME);
-        checkoutPage.getCountryField().sendKeys(Constants.COUNTRY);
-        checkoutPage.getCityField().sendKeys(Constants.CITY);
-        checkoutPage.getCreditCardField().sendKeys(Constants.CREDIT_CARD);
-        checkoutPage.getMonthField().sendKeys(Constants.MONTH);
-        checkoutPage.getYearField().sendKeys(Constants.YEAR);
-
+        fillCheckoutPage();
         checkoutPage.getPurchaseButton().click();
         waitElementIsClickable(checkoutPage.getOrderConfirmation());
         String confirmationMessage = checkoutPage.getOrderConfirmation().getText();
@@ -144,5 +135,17 @@ public class TestCases extends PageBase {
         waitElementIsClickable(loginPage.getAddToCartButton());
         loginPage.getAddToCartButton().click();
         waitAlertIsPresent();
+    }
+
+    /**
+     * Method to fill checkout page
+     */
+    private void fillCheckoutPage(){
+        checkoutPage.getNameField().sendKeys(Constants.NAME);
+        checkoutPage.getCountryField().sendKeys(Constants.COUNTRY);
+        checkoutPage.getCityField().sendKeys(Constants.CITY);
+        checkoutPage.getCreditCardField().sendKeys(Constants.CREDIT_CARD);
+        checkoutPage.getMonthField().sendKeys(Constants.MONTH);
+        checkoutPage.getYearField().sendKeys(Constants.YEAR);
     }
 }

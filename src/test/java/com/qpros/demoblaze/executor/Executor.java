@@ -1,53 +1,28 @@
 package com.qpros.demoblaze.executor;
 
-import com.qpros.demoblaze.common.Constants;
-import com.qpros.demoblaze.scenarios.TestCases;
-import com.qpros.demoblaze.utils.AutomationUtil;
-import com.qpros.demoblaze.utils.DriverUtil;
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
-import org.openqa.selenium.WebDriver;
-import org.testng.ITestResult;
-import org.testng.Reporter;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
+import org.testng.annotations.*;
 
-public class Executor {
 
-    public WebDriver driver;
-    ExtentReports extentReports;
-    ExtentTest extentTest;
-    AutomationUtil automationUtil = new AutomationUtil();
+public class Executor extends ExecutorBase {
 
-    @BeforeTest
-    public void setup(){
-        extentReports = new ExtentReports(Constants.REPORT_PATH + "AutomationReport_" + LocalDateTime.now() + ".html", false);
-        DriverUtil driverUtil = new DriverUtil();
-        driver = driverUtil.initiateWebDriver();
+    /**
+     * In case you need to execute the same available test on different users
+     */
+    @DataProvider(name = "user login")
+    public Object[][] usernameData() {
+        return new Object[][]{
+                {"QPros_" + automationUtil.generateRandomValue()}
+        };
     }
 
-    @Test
-    public void executeTest(){
-        TestCases testCases = new TestCases(driver);
-        testCases.registerAndLogin(extentReports);
-        testCases.validateCategoryItemsExistence(extentReports);
-        testCases.addRandomItem(extentReports);
-        testCases.removeItem(extentReports);
-        testCases.completeCheckout(extentReports);
-    }
-
-    @AfterMethod
-    public void tearDown(ITestResult result) throws IOException {
-        Reporter.setCurrentTestResult(result);
-        if(ITestResult.FAILURE == result.getStatus()){
-            automationUtil.takeScreenshot(driver);
-        }
-        extentReports.endTest(extentTest);
-        extentReports.flush();
-        driver.quit();
+    @Test(dataProvider = "user login")
+    public void executeTests(String username) {
+        extentTest = extentReports.startTest("QPros Technical Assessment Scenario - For user: " + username);
+        testCases.registerAndLogin(extentTest, username);
+        testCases.validateCategoryItemsExistence(extentTest);
+        testCases.addRandomItem(extentTest);
+        testCases.removeItem(extentTest);
+        testCases.completeCheckout(extentTest);
     }
 }
