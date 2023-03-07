@@ -15,7 +15,7 @@ public class PageBase {
     private WebDriverWait _wait;
 
     public PageBase(WebDriver driver) {
-        PageBase.driver = driver;
+        this.driver = driver;
         PageFactory.initElements(this.driver, this);
     }
 

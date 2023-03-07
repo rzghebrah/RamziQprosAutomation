@@ -7,25 +7,23 @@ import com.qpros.demoblaze.utils.AutomationUtil;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
 
 public class TestCases extends PageBase {
 
     ExtentTest extentTest;
-    HomePage homePage = new HomePage(driver);
-    LoginPage loginPage = new LoginPage(driver);
-    CartPage cartPage = new CartPage(driver);
-    CheckoutPage checkoutPage = new CheckoutPage(driver);
-
     AssertionUtil assertionUtil = new AssertionUtil();
     AutomationUtil automationUtil = new AutomationUtil();
 
     String username = "Qpros_" + automationUtil.generateRandomValue();
 
+    /* Available Pages */
+    HomePage homePage = new HomePage(driver);
+    LoginPage loginPage = new LoginPage(driver);
+    CartPage cartPage = new CartPage(driver);
+    CheckoutPage checkoutPage = new CheckoutPage(driver);
+
     public TestCases(WebDriver driver) {
         super(driver);
-        this.driver = driver;
-        PageFactory.initElements(this.driver, this);
     }
 
     /**
