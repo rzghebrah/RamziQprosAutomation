@@ -2,7 +2,7 @@
 # Assignee [Ramzi Abu Zghebrah]
 
 # What:
-UI Automation framework "data driven", maven based project to test use cases in QPros Technical Assessment. framework was implemented using Selenium WebDriver + Java 8 and TestNG unit test framework. Also, HTML Extent Report is used as a reporting solution.
+UI Automation framework "data driven" following page object model design, maven based project to test use cases in QPros Technical Assessment. framework was implemented using Selenium WebDriver + Java 8 and TestNG unit test framework. Also, HTML Extent Report is used as a reporting solution.
 
 
 # How to Run
