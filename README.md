@@ -12,7 +12,7 @@ The below two ways are available to run the test:
 
 2- Run ```"execute.xml"```
 
-* If you want to execute test in headless mode, please add "headless_mode=true" to the execution VM options ```"-Dheadless_mode=true"```  [Default value is false and browser session will start]
+* Only Chrome browser is supported
 * If you would like to test the same flow with different login credentials, please add the new username in data provider under "UsernameData" method --> class ```Executor.java```
 
 # Reporting

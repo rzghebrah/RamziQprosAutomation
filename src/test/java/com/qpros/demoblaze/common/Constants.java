@@ -5,7 +5,6 @@ import java.io.File;
 public class Constants {
 
     /****** All constants used in this project ******/
-    public static final String HEADLESS_MODE = "headless_mode";
     public static final int ELEMENT_WAIT_PERIOD_SEC = 30;
     public static final String DEMO_BLAZE_WEBSITE = "https://www.demoblaze.com/";
     public static final String LOGIN_PASSWORD = "P@ssw0rd@123";
